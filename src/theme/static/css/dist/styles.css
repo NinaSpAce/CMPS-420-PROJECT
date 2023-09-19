@@ -704,23 +704,10 @@ select {
   display: block;
 }
 
-.flex {
-  display: flex;
-}
-
-.place-items-center {
-  place-items: center;
-}
-
-.justify-center {
-  justify-content: center;
-}
-
 .p-10 {
   padding: 2.5rem;
 }
 
-.text-blue-500 {
-  --tw-text-opacity: 1;
-  color: rgb(59 130 246 / var(--tw-text-opacity));
+.text-center {
+  text-align: center;
 }

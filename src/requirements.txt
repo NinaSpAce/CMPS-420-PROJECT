@@ -1,2 +1,2 @@
 Django
-django-tailwind
+django-bootstrap5

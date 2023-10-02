@@ -2,20 +2,24 @@
 {% load static %}
 
 {% block content %}
-<div class="p-4 text-center container-sm d-flex flex-column">
+<div class="p-4 text-center container-md d-flex flex-column">
     <p class="fs-2 font-monospace">Welcome to...</p>
     <div class="p-3 container d-flex flex-column">
         <img class="img-fluid img-thumbnail mx-auto shadow-sm border border-2 border-primary" src="{% static 'images/brainwaves.jpg' %}"/>
     </div>
     <p class= "fs-1">Wavelength</p>
 
-    <!-- File Upload Form -->
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form }}
-        <input type="file" name= "file">
-        <br>
-        <button type="submit" class="btn btn-primary">Upload File </button>
+        <div class="card d-flex flex-column justify-content-center"> 
+            <div class="card-body">
+                <input type="file" name= "file">
+                <br>
+             <a href="settings.html" class="btn btn-primary"> Upload File </a>
+             <p class="card-text">Only .EEG, .FIFF, etc</p>
+            </div>
+    </div>
     </form>
 </div>
 {% endblock %}	

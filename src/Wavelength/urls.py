@@ -7,7 +7,7 @@ from . import views
 #URL Config
 urlpatterns = [
     path("", views.home, name= "homepage"),
-    path("", views.upload_file, name= 'upload_file'),
+    path("settings/", views.settings, name= 'settings'),
 ]
 
 if settings.DEBUG:

@@ -1,26 +1,26 @@
-from django.shortcuts import render, redirect
-from .forms import FileUploadForm
+
+from django.shortcuts import render
+from django.http import HttpResponse
+from .models import FileUpload
+import mne
+
+ # Process the uploaded file here (e.g., using MNE)
+def handle_uploaded_file(f):
+   mne.io.read_raw_fif(f)
+
+def settings (request):
+    return render(request, "pages/settings.html", {})
 
 #First page
 def home (request):
     #In here, you can pull data, transform data, etc
-    return render(request,"pages/home.html", {}) 
-def upload_file(request):
-    if request.method == 'POST':
-        form = FileUploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            # Process the uploaded file here (e.g., using MNE)
-            uploaded_file = form.cleaned_data['file']
-            
-             # Do your processing here with 'uploaded_file'
-            print(f"Uploaded file name: {uploaded_file.name}")
+     if request.method == 'POST':
+        newfile = request.FILES['file']
+        document = FileUpload.objects.create(file=newfile)
+        document.save()
+        return HttpResponse("File was uploaded")
+     return render(request,"pages/home.html", {})
 
 
-            # Redirect to a success page or do something else
-            return redirect('')
-        else: form.errors
-    else:
-        form = FileUploadForm()
 
-
-    return render(request,'pages/home.html', {'form': form})
+    

@@ -1,3 +1,4 @@
 Django
-django-tailwind
-django-tailwind[reload]
+django-bootstrap5
+mne
+scikit-learn

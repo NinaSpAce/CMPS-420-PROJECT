@@ -2,12 +2,13 @@ from django.conf import settings
 from django.shortcuts import render
 from .models import FileUpload
 import mne
+import os ##added this. import os works w file paths
 
 
  # Process the uploaded file here (e.g., using MNE)
-def handle_uploaded_file(f):
+def handle_uploaded_file(f): 
    # Read and save raw data
-   raw = mne.io.read_raw_fif(f, preload=True)
+   raw = mne.io.read_raw_fif(f, preload=True) 
    print(raw.info)
    
    #Preprossing with filtering
@@ -44,11 +45,11 @@ def settings (request):
 #First page
 def home (request):
     #In here, you can pull data, transform data, etc
-     if request.method == 'POST':
+     if request.method == 'POST' and 'file' in request.Files: ## changed if request.method == 'POST' to if request.method == 'POST' and 'file' in request.Files
         newfile = request.FILES['file']
         document = FileUpload.objects.create(file=newfile)
         document.save()
-        handle_uploaded_file(newfile)           
+        handle_uploaded_file(newfile)        
         return render(request, "pages/settings.html", {})
      return render(request,"pages/home.html", {})
 

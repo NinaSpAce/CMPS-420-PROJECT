@@ -2,8 +2,6 @@ from django.conf import settings
 from django.shortcuts import render
 from .models import FileUpload
 import mne
-import os ##added this. import os works w file paths
-
 
  # Process the uploaded file here (e.g., using MNE)
 def handle_uploaded_file(f): 
@@ -19,6 +17,7 @@ def handle_uploaded_file(f):
    ica.fit(raw.copy().filter(8,35))
    ica.plot_components(outlines="head") #ICA displays
    
+    
    bad_ica, scores = ica.find_bads_eog(raw, 'MEG 0122', threshold =2)   
    ica.apply(raw.copy(), exclude =ica.exclude).plot() #graph with better icas
    
@@ -45,7 +44,7 @@ def settings (request):
 #First page
 def home (request):
     #In here, you can pull data, transform data, etc
-     if request.method == 'POST' and 'file' in request.Files: ## changed if request.method == 'POST' to if request.method == 'POST' and 'file' in request.Files
+     if request.method == 'POST':
         newfile = request.FILES['file']
         document = FileUpload.objects.create(file=newfile)
         document.save()

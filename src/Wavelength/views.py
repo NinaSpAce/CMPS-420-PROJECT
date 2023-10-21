@@ -1,59 +1,45 @@
-
-import re
+from django.conf import settings
 from django.shortcuts import render
-from django.http import HttpResponse
-from matplotlib.pylab import rand
 from .models import FileUpload
 import mne
 
  # Process the uploaded file here (e.g., using MNE)
-def handle_uploaded_file():
+def handle_uploaded_file(f): 
+   # Read and save raw data
+   raw = mne.io.read_raw_fif(f, preload=True) 
+   print(raw.info)
    
-# Read and save raw data
-   data_set= mne.datasets.sample.data_path()
-   data_raw_file= ( 
-      data_set / "MEG" / "sample" / "sample_audvis_filt-0-40_raw.fif"
-   )
-   raw = mne.io.read_raw_fif(data_raw_file)
+   #Preprossing with filtering
+   raw.filter(1,20)
+      
+   #Preprosses with ICA
+   ica = mne.preprocessing.ICA(n_components=20,random_state=0)
+   ica.fit(raw.copy().filter(8,35))
+   ica.plot_components(outlines="head") #ICA displays
    
-#Preprossing with ICA
-   ica = mne.preprocessing.ICA(n_components=20, random_state=97, max_iter=800)
-   ica.fit(raw)
-   ica.exclude = [1,2]
-   ica.plot_properties(raw, picks=ica.exclude)
+    
+   bad_ica, scores = ica.find_bads_eog(raw, 'MEG 0122', threshold =2)   
+   ica.apply(raw.copy(), exclude =ica.exclude).plot() #graph with better icas
    
-   original_raw = raw.copy()
-   raw.load_data()
-   ica.apply(raw)
-
-   channels = [
-    "MEG 0111",
-    "MEG 0121",
-    "MEG 0131",
-    "MEG 0211",
-    "MEG 0221",
-    "MEG 0231",
-    "MEG 0311",
-    "MEG 0321",
-    "MEG 0331",
-    "MEG 1511",
-    "MEG 1521",
-    "MEG 1531",
-    "EEG 001",
-    "EEG 002",
-    "EEG 003",
-    "EEG 004",
-    "EEG 005",
-    "EEG 006",
-    "EEG 007",
-    "EEG 008",
-]
-   channel_ids = [raw.ch_names.index(channel) for channel in channels]
-   original_raw.plot(order=channel_ids, start=12, duration=4)
-   raw.plot(order=channel_ids, start=12, duration=4)
+   events = mne.find_events(raw, stim_channel="STI 014")
+   event_dict = {
+    "auditory/left": 1,
+    "auditory/right": 2,
+    "visual/left": 3,
+    "visual/right": 4,
+    "face": 5,
+    "buttonpress": 32,
+}
+   epochs = mne.Epochs(raw, events, tmin=-0.3, tmax=0.7, event_id=event_dict, preload=True) 
+   epochs.plot(n_epochs=10, events=True) #before ica
    
-def settings (request):
-    return render(request, "pages/settings.html", {})
+   epochs = mne.Epochs(raw, events, tmin=-0.3, tmax=0.7, event_id=event_dict, preload=True) 
+   epochs = ica.apply(epochs,exclude=ica.exclude)
+   epochs.apply_baseline((None,0))
+   epochs["auditory"].plot_image(picks=[13]) #ICA Epoch image for one channel
+   
+def presentation (request):
+    return render(request, "pages/presentation.html", {})
 
 #First page
 def home (request):
@@ -62,7 +48,8 @@ def home (request):
         newfile = request.FILES['file']
         document = FileUpload.objects.create(file=newfile)
         document.save()
-        return render(request, "pages/settings.html", {})
+        handle_uploaded_file(newfile)        
+        return render(request, "pages/presentation.html", {})
      return render(request,"pages/home.html", {})
 
 

@@ -7,7 +7,7 @@ from . import views
 #URL Config
 urlpatterns = [
     path("", views.home, name= "homepage"),
-    path("settings", views.settings, name= 'settings'),
+    path("presentation", views.presentation, name= "view"),
 ]
 
 if settings.DEBUG:

@@ -1,3 +1,7 @@
 Django
 django-bootstrap5
 mne
+numpy
+chart-studio
+pandas
+scikit-learn

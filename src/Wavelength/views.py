@@ -4,6 +4,7 @@ import mne
 import pandas as pd  
 import numpy as np                
 import plotly.graph_objects as go 
+import plotly.io as pio
 from plotly.offline import plot
 from plotly.graph_objs import Layout, YAxis, Scatter, Annotation, Annotations, Data, Figure, Marker, Font
 mne.set_log_level('WARNING')
@@ -16,8 +17,8 @@ def handle_uploaded_file(f):
    #Preprossing with filtering
    raw.filter(1,20)
    epoch_plot=epoch_handler(raw)
-   channel_plots= channel_picks(raw)
-   return epoch_plot, channel_plots
+   channel_plot= channel_picks(raw)
+   return epoch_plot, channel_plot
 
    
 def channel_picks(raw):
@@ -47,9 +48,8 @@ def channel_picks(raw):
    layout.update(annotations=annotations)
    layout.update(autosize=False, width=1000, height=600)
    fig = Figure(data=Data(traces), layout=layout)
-   plt_div = plot(fig, output_type='div')
-   return plt_div
-
+   channels_html= pio.to_html(fig, full_html=True)
+   return channels_html
 
       
 def epoch_handler(raw):
@@ -80,8 +80,8 @@ def epoch_handler(raw):
    for ch in epochs.info['ch_names']:
       fig.add_scatter(x=epochs.times, y=values[ch], name=ch)
 
-   plt_div = plot(fig, output_type='div')
-   return plt_div
+   epochs_html= pio.to_html(fig, full_html=True)
+   return epochs_html
    
    
    

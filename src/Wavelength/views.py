@@ -18,9 +18,18 @@ def handle_uploaded_file(f):
    raw.filter(1,20)
    epoch_plot=epoch_handler(raw)
    channel_plot= channel_picks(raw)
+
    return epoch_plot, channel_plot
 
    
+# def events(raw):
+#    events = mne.find_events(raw, stim_channel="STI 014")
+#    event_ids= ['aud_1', 'aud_r', 'vis_1', 'smiley', 'button']
+#    fig = mne.viz.plot_events(events, raw.info['sfreq'], raw.first_samp, show=False)
+#    figure = go.Figure(layout=dict(showlegend=True), data=[dict(name=e) for e in event_ids])
+#    events_html= pio.to_html(fig, full_html=True)
+#    return events_html
+
 def channel_picks(raw):
    picks = mne.pick_types(raw.info, meg='grad', exclude=[])
    start, stop = raw.time_as_index([0,10])
@@ -95,10 +104,11 @@ def home (request):
         newfile = request.FILES['file']
         document = FileUpload.objects.create(file=newfile)
         document.save()
-        epoch_plot, channel_plot= handle_uploaded_file(newfile)        
-        return render(request, "pages/presentation.html", context={'epoch_plot': epoch_plot, 'channel_plot': channel_plot})
+        epoch_plot, channel_plot, events_plot= handle_uploaded_file(newfile)        
+        return render(request, "pages/presentation.html", context={'epoch_plot': epoch_plot, 'channel_plot': channel_plot, 'events_plot': events_plot})
      return render(request,"pages/home.html", {})
 
 
 
     
+ 

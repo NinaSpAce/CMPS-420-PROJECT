@@ -11,11 +11,12 @@
 
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
+        {{ form }}
         <div class="card d-flex flex-column justify-content-center"> 
             <div class="card-body">
                 <input type="file" name= "file">
                 <br>
-             <button type= "submit" class="btn btn-primary" >Upload File </button>
+                <button type= "submit" class="btn btn-primary" >Upload File </button>
              <p class="card-text">Only .EEG, .FIFF, etc</p>
             </div>
     </div>

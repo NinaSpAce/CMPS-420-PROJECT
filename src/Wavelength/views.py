@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import FileUpload
 import mne
 import pandas as pd  
@@ -92,7 +92,9 @@ def epoch_handler(raw):
    epochs_html= pio.to_html(fig, full_html=True)
    return epochs_html
    
-   
+
+def settings(request):
+    return render(request, "pages/settings.html", {})
    
 def presentation (request):
     return render(request, "pages/presentation.html", {})
@@ -104,8 +106,7 @@ def home (request):
         newfile = request.FILES['file']
         document = FileUpload.objects.create(file=newfile)
         document.save()
-        epoch_plot, channel_plot= handle_uploaded_file(newfile)        
-        return render(request, "pages/presentation.html", context={'epoch_plot': epoch_plot, 'channel_plot': channel_plot})
+        return redirect('settings')
      return render(request,"pages/home.html", {})
 
 

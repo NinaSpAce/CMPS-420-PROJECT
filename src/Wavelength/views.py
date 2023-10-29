@@ -104,8 +104,8 @@ def home (request):
         newfile = request.FILES['file']
         document = FileUpload.objects.create(file=newfile)
         document.save()
-        epoch_plot, channel_plot, events_plot= handle_uploaded_file(newfile)        
-        return render(request, "pages/presentation.html", context={'epoch_plot': epoch_plot, 'channel_plot': channel_plot, 'events_plot': events_plot})
+        epoch_plot, channel_plot= handle_uploaded_file(newfile)        
+        return render(request, "pages/presentation.html", context={'epoch_plot': epoch_plot, 'channel_plot': channel_plot})
      return render(request,"pages/home.html", {})
 
 

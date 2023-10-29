@@ -9,14 +9,13 @@
     </div>
     <p class= "fs-1">Wavelength</p>
 
-    <form method="post" enctype="multipart/form-data">
+    <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form }}
         <div class="card d-flex flex-column justify-content-center"> 
             <div class="card-body">
                 <input type="file" name= "file">
                 <br>
-             <a href="settings.html" class="btn btn-primary"> Upload File </a>
+             <button type= "submit" class="btn btn-primary" >Upload File </button>
              <p class="card-text">Only .EEG, .FIFF, etc</p>
             </div>
     </div>

@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% include 'navbar.html'%}
+
+
+  <div class="d-flex justify-content-start text-center ms-5 p-4">
+    <div class="border border-primary p-3" style="width: 175px">
+      <h5>View Options</h5>
+    </div>
+  </div>
+
+<div class="d-flex justify-content-end border border-primary"></div>
+
+<div class="d-flex justify-content-start ms-5 p-4">
+  <div class="form-check form-check-inline">
+    <input class="form-check-input" type="checkbox" id="tabs" value="Tabs">
+    <label class="form-check-label" for="tabs">Tabs</label>
+  </div>
+  <div class="form-check form-check-inline">
+    <input class="form-check-input" type="checkbox" id="Split-View" value="Split View">
+    <label class="form-check-label" for="Split-View">Split View</label>
+  </div>
+</div>
+
+<div class="d-flex justify-content-start ms-5 p-4">
+  <p class="fs-5">Max Tabs<p>
+
+    <div class="p-1 ms-3">
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="radio" name="inlineRadioOptions" id="1" value="option1">
+      <label class="form-check-label" for="1">1</label>
+    </div>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="radio" name="inlineRadioOptions" id="2" value="option2">
+      <label class="form-check-label" for="2">2</label>
+    </div>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="radio" name="inlineRadioOptions" id="3" value="option3">
+      <label class="form-check-label" for="3">3</label>
+    </div>
+    <div class="form-check form-check-inline">
+      <input class="form-check-input" type="radio" name="inlineRadioOptions" id="4" value="option4">
+      <label class="form-check-label" for="4">4</label>
+    </div>
+  </div>
+</div>
+
+<div class="d-flex justify-content-start ms-5 p-4">
+  <p class="fs-5">Split Style<p>
+   
+    <div class="p-1 ms-3">
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="Vertical" value="option1">
+        <label class="form-check-label" for="Vertical">Vertical</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="Horizontal" value="option2">
+        <label class="form-check-label" for="Horizontal">Horizontal</label>
+      </div>
+  </div>
+</div>
+
+  <div class="d-flex justify-content-start text-center ms-5 p-4">
+    <div class="border border-primary p-3" style="width: 200px">
+      <h5>Brainwave Options</h5>
+    </div>
+  </div>
+
+{% comment %} This piece should be display as many times as the requested tabs. {% endcomment %}
+  <div class="d-flex justify-content-start ms-5 p-4">
+    <p class="fs-5">View 1<p>
+
+      <div class="btn-group ms-3">
+
+          <button type="button" class="btn btn-outline-primary">Waves</button>
+          <button class="btn btn-primary dropdown-toggle dropdown-toggle-split" id="checkbox-dropdown" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-bs-auto-close="outside"></button>
+        
+        <div class="dropdown-menu" aria-labelledby="checkbox-dropdown">
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="Alpha">
+            <label class="form-check-label" for="Alpha">Alpha</label>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="Beta">
+            <label class="form-check-label" for="Beta">Beta</label>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="Gamma">
+            <label class="form-check-label" for="Gamma">Gamma</label>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="Delta">
+            <label class="form-check-label" for="Delta">Delta</label>
+          </div>
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="Theta">
+            <label class="form-check-label" for="Theta">Theta</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-end p-4">
+      <a type="button" href="{% url 'settings-electrode-topography' %}" class="btn btn-success btn-lg d-flex justify-content-end">Next</a>
+    </div>
+{% endblock %}	

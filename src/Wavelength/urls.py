@@ -8,7 +8,8 @@ from . import views
 urlpatterns = [
     path("", views.home, name= "homepage"),
     path("presentation", views.presentation, name= "presentation"),
-    path("settings", views.settings, name= "settings"),
+    path("settings/brainwaves", views.settings1, name= "settings-brainwaves"),
+    path("settings/electrode-topography", views.settings2, name="settings-electrode-topography")
 ]
 
 if settings.DEBUG:

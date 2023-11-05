@@ -93,8 +93,11 @@ def epoch_handler(raw):
    return epochs_html
    
 
-def settings(request):
-    return render(request, "pages/settings.html", {})
+def settings1(request):
+    return render(request, "pages/settings-pg1.html", {})
+
+def settings2(request):
+    return render(request, "pages/settings-pg2.html", {})
    
 def presentation (request):
     return render(request, "pages/presentation.html", {})

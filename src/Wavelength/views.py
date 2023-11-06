@@ -99,8 +99,12 @@ def settings1(request):
 def settings2(request):
     return render(request, "pages/settings-pg2.html", {})
    
+def settings3(request):
+    return render(request, "pages/settings-pg3.html", {})
+
 def presentation (request):
     return render(request, "pages/presentation.html", {})
+
 
 #First page
 def home (request):
@@ -109,7 +113,7 @@ def home (request):
         newfile = request.FILES['file']
         document = FileUpload.objects.create(file=newfile)
         document.save()
-        return redirect('settings')
+        return redirect('settings-brainwaves')
      return render(request,"pages/home.html", {})
 
 

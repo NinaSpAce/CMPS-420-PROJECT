@@ -22,40 +22,43 @@
     <label class="form-check-label" for="Split-View">Split View</label>
   </div>
 </div>
+{% comment %} Appears only if you want tabs {% endcomment %}
 
 <div class="d-flex justify-content-start ms-5 p-4">
   <p class="fs-5">Max Tabs<p>
 
     <div class="p-1 ms-3">
     <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="inlineRadioOptions" id="1" value="option1">
+      <input class="form-check-input" type="radio" name="TabOptions" id="1" value="option1">
       <label class="form-check-label" for="1">1</label>
     </div>
     <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="inlineRadioOptions" id="2" value="option2">
+      <input class="form-check-input" type="radio" name="TabOptions" id="2" value="option2">
       <label class="form-check-label" for="2">2</label>
     </div>
     <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="inlineRadioOptions" id="3" value="option3">
+      <input class="form-check-input" type="radio" name="TabOptions" id="3" value="option3">
       <label class="form-check-label" for="3">3</label>
     </div>
     <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="inlineRadioOptions" id="4" value="option4">
+      <input class="form-check-input" type="radio" name="TabOptions" id="4" value="option4">
       <label class="form-check-label" for="4">4</label>
     </div>
   </div>
 </div>
+
+{% comment %} Appears only if you want split view {% endcomment %}
 
 <div class="d-flex justify-content-start ms-5 p-4">
   <p class="fs-5">Split Style<p>
    
     <div class="p-1 ms-3">
       <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="Vertical" value="option1">
+        <input class="form-check-input" type="radio" name="SplitOptions" id="Vertical" value="option1">
         <label class="form-check-label" for="Vertical">Vertical</label>
       </div>
       <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="inlineRadioOptions" id="Horizontal" value="option2">
+        <input class="form-check-input" type="radio" name="SplitOptions" id="Horizontal" value="option2">
         <label class="form-check-label" for="Horizontal">Horizontal</label>
       </div>
   </div>
@@ -74,27 +77,27 @@
       <div class="btn-group ms-3">
 
           <button type="button" class="btn btn-outline-primary">Waves</button>
-          <button class="btn btn-primary dropdown-toggle dropdown-toggle-split" id="checkbox-dropdown" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-bs-auto-close="outside"></button>
+          <button class="btn btn-primary dropdown-toggle dropdown-toggle-split" id="checkbox-dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside"></button>
         
         <div class="dropdown-menu" aria-labelledby="checkbox-dropdown">
           <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="Alpha">
+            <input type="checkbox" class="form-check-input" id="Alpha" value="alpha">
             <label class="form-check-label" for="Alpha">Alpha</label>
           </div>
           <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="Beta">
+            <input type="checkbox" class="form-check-input" id="Beta" value="beta">
             <label class="form-check-label" for="Beta">Beta</label>
           </div>
           <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="Gamma">
+            <input type="checkbox" class="form-check-input" id="Gamma" value= "gamma">
             <label class="form-check-label" for="Gamma">Gamma</label>
           </div>
           <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="Delta">
+            <input type="checkbox" class="form-check-input" id="Delta" value="delta">
             <label class="form-check-label" for="Delta">Delta</label>
           </div>
           <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="Theta">
+            <input type="checkbox" class="form-check-input" id="Theta" value="theta">
             <label class="form-check-label" for="Theta">Theta</label>
           </div>
         </div>

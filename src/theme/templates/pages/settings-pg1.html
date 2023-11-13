@@ -3,13 +3,80 @@
 {% block content %}
 {% include 'navbar.html'%}
 
+<script>
+function evokedChecker(){
+  var singleRadio = document.querySelector('#Single');
+  var combinedRadio = document.querySelector('#Combined');
+  var checkboxes = document.querySelectorAll('[name=EventPicks]');
+  
+  checkboxes.forEach(function(checkbox) {
+    checkbox.checked = false;
+  });
+
+  checkboxes.forEach(function(checkbox) {
+    checkbox.disabled = false;
+  });
+
+  if (singleRadio.checked){
+    singleEvoked(checkboxes);
+  }
+  else if(combinedRadio.checked){
+    combinedEvoked(checkboxes);
+}
+}
+
+function combinedEvoked(checkboxes){
+  var maxEvokedOptions = 2;
+
+  checkboxes.forEach(function (checkbox) {
+  checkbox.addEventListener('change', function () {
+    var selectedCheckboxes = document.querySelectorAll('[name=EventPicks]:checked').length;
+
+    if (selectedCheckboxes >= maxEvokedOptions){
+      checkboxes.forEach(function (cb) {
+        if(!cb.checked){
+          cb.disabled = true;
+        }
+      });
+    } else {
+      checkboxes.forEach(function (cb) {
+        cb.disabled = false;
+      });
+    }
+  });
+});
+  }
+
+  function singleEvoked(checkboxes){
+    var maxEvokedOptions = 1;
+
+    checkboxes.forEach(function (checkbox) {
+    checkbox.addEventListener('change', function () {
+    var selectedCheckboxes = document.querySelectorAll('[name=EventPicks]:checked').length;
+
+    if (selectedCheckboxes >= maxEvokedOptions){
+      checkboxes.forEach(function (cb) {
+        if(!cb.checked){
+          cb.disabled = true;
+        }
+      });
+    } else {
+      checkboxes.forEach(function (cb) {
+        cb.disabled = false;
+      });
+    }
+  });
+});
+  }
+
+
+</script>
+
   <div class="d-flex justify-content-start text-center ms-5 p-4">
     <div class="border border-primary p-3" style="width: 200px">
       <h4>View Options</h4>
     </div>
   </div>
-
-  <div class="d-flex justify-content-end border border-primary"></div>
 
 <div id="MaxTabs" class="d-flex justify-content-start ms-5 p-4">
 <p class="fs-5">Max Tabs</p>
@@ -34,8 +101,6 @@
   </div>
 
 
-{% comment %} Appears only if you want split view {% endcomment %}
-
 <div class="d-flex justify-content-start ms-5 p-4">
   <p class="fs-5">Split Style</p>
    
@@ -51,6 +116,33 @@
   </div>
 </div>
 
+<div class="d-flex justify-content-start text-center ms-5 p-4">
+  <div class="border border-primary p-3" style="width: 275px">
+    <h4>Preprocessing Options</h4>
+  </div>
+</div>
+
+<div class="d-flex justify-content-start ms-5 p-4">
+  <ul class="list-group">
+    <li class="list-group-item">
+      <input class="form-check-input me-1" type="checkbox" id="artifacts">
+      <label class="form-check-label" for="artifacts">Artifacts</label>
+    </li>
+    <li class="list-group-item">
+      <input class="form-check-input me-1" type="checkbox" id="regression">
+      <label class="form-check-label" for="regression">Regression</label>
+    </li>
+    <li class="list-group-item">
+      <input class="form-check-input me-1" type="checkbox" id="filtering">
+      <label class="form-check-label" for="filtering">Filtering</label>
+    </li>
+    <li class="list-group-item">
+      <input class="form-check-input me-1" type="checkbox" id="ica">
+      <label class="form-check-label" for="ica">ICA</label>
+    </li>
+  </ul>
+</div>
+
   <div class="d-flex justify-content-start text-center ms-5 p-4">
     <div class="border border-primary p-3" style="width: 200px">
       <h4>Graph Options</h4>
@@ -58,9 +150,6 @@
   </div>
 
   <div class="d-flex justify-content-start ms-5 p-4">
-    <p class="fs-5">Graph type</p>
-
-    <div class="ms-3">
       <ul class="list-group">
         <li class="list-group-item">
           <input class="form-check-input me-1" type="checkbox" value="channels" id="channels">
@@ -69,10 +158,6 @@
         <li class="list-group-item">
           <input class="form-check-input me-1" type="checkbox" value="events" id="events">
           <label class="form-check-label" for="events">Events</label>
-        </li>
-        <li class="list-group-item">
-          <input class="form-check-input me-1" type="checkbox" value="histogram" id="histogram">
-          <label class="form-check-label" for="histogram">Histogram</label>
         </li>
         <li class="list-group-item">
           <input class="form-check-input me-1" type="checkbox" value="evoked" id="evoked">
@@ -84,25 +169,24 @@
         </li>
       </ul>
     </div>
-  </div>
   
-
-
-
-{% comment %} This piece should be display as many times as the requested tabs. {% endcomment %}
+  <div class="d-flex justify-content-start text-center ms-5 p-4">
+    <div class="border border-primary p-3" style="width: 225px">
+      <h4>Channel Options</h4>
+    </div>
+  </div>
+ 
   <div class="d-flex justify-content-start ms-5 p-4">
-    <p class="fs-5">Channel Select</p>
-
-      <div class="ms-3">
+      
         <ul class="list-group list-group-horizontal">
           <li class="list-group-item">
             <input class="form-check-input me-1" type="checkbox" id="select-all">
             <label class="form-check-label" for="select-all">Select All</label>
           </li>
           </ul>
-      </div>
+  </div>
 
-      <div class="ms-3">
+  <div class="ms-5 p-4">
         <ul class="list-group list-group-horizontal-sm">
           <li class="list-group-item flex-fill">
             <input class="form-check-input me-1" type="checkbox" id="MEG-0111">
@@ -192,10 +276,87 @@
             <input class="form-check-input me-1" type="checkbox" id="EEG-008">
             <label class="form-check-label" for="EEG-008">EEG 008</label>
           </li>
-          </ul>
-      </div>
+        </ul>
     </div>
           
+    <div class="d-flex justify-content-start text-center ms-5 p-4">
+      <div class="border border-primary p-3" style="width: 200px">
+        <h4>Event Options</h4>
+      </div>
+    </div>
+   
+    <div class="d-flex justify-content-start ms-5 p-4">
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="EventOptions" id="generate-events">
+          <label class="form-check-label" for="generate-events">Generate Events</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="EventOptions" id="events-only">
+          <label class="form-check-label" for="events-only">Events Only</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" name="EventOptions" id="events-raw">
+          <label class="form-check-label" for="events-raw">Events/Raw Data</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-start text-center ms-5 p-4">
+      <div class="border border-primary p-3" style="width: 220px">
+        <h4>Evoked Options</h4>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-start ms-5 p-4">
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="EvokedOptions" id="Single" onchange="evokedChecker()">
+        <label class="form-check-label" for="Single">Single Evoked</label>
+      </div>
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="radio" name="EvokedOptions" id="Combined" onchange="evokedChecker()">
+        <label class="form-check-label" for="Combined">Combined Evoked</label>
+      </div>
+    </div>
+  </div>
+
+  <div class="d-flex justify-content-start ms-5 p-4">
+    <ul class="list-group">
+      <li class="list-group-item">
+      <input class="form-check-input me-1" type="checkbox" name="EventPicks" id="aud-left">
+      <label class="form-check-label" for="aud-left">auditory/left</label>
+      </li>
+    <li class="list-group-item">
+      <input class="form-check-input me-1" type="checkbox" name="EventPicks" id="aud-right">
+      <label class="form-check-label" for="aud-right">auditory/right</label>
+    </li>
+    <li class="list-group-item">
+      <input class="form-check-input me-1" type="checkbox" name="EventPicks" id="vis-left">
+      <label class="form-check-label" for="vis-left">visual/left</label>
+    </li>
+    <li class="list-group-item">
+      <input class="form-check-input me-1" type="checkbox" name="EventPicks" id="vis-right">
+      <label class="form-check-label" for="vis-right">visual/right</label>
+    </li>
+</ul>
+</div>
+
+<div class="d-flex justify-content-start text-center ms-5 p-4">
+  <div class="border border-primary p-3" style="width: 300px">
+    <h4>Time-Frequency Options</h4>
+  </div>
+</div>
+
+<div class="d-flex justify-content-start ms-5 p-4">
+  <div class="form-check form-check-inline">
+    <input class="form-check-input" type="checkbox" name="TFOptions" id="Spectrum">
+    <label class="form-check-label" for="Spectrum">Spectrum</label>
+  </div>
+  <div class="form-check form-check-inline">
+    <input class="form-check-input" type="checkbox" name="TFOptions" id="Epoch-Spectrum">
+    <label class="form-check-label" for="Epoch-Spectrum">Epochs Spectrum</label>
+  </div>
+</div>
+</div>
 
   <div class="d-flex justify-content-end p-4">
     <a type="button" href="{% url 'settings-electrode-topography' %}" class="btn btn-success btn-lg d-flex justify-content-end">Next</a>

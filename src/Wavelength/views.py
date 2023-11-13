@@ -113,7 +113,7 @@ def home (request):
         newfile = request.FILES['file']
         document = FileUpload.objects.create(file=newfile)
         document.save()
-        return redirect('settings-brainwaves')
+        return redirect('settings-graphs')
      return render(request,"pages/home.html", {})
 
 

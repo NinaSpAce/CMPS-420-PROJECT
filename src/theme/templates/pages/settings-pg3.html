@@ -5,12 +5,10 @@
 
 
 <div class="d-flex justify-content-start text-center ms-5 p-4">
-    <div class="border border-primary p-3" style="width: 175px">
-      <h5>View Options</h5>
+    <div class="border border-primary p-3" style="width: 200px">
+      <h4>View Options</h4>
     </div>
   </div>
-
-  <div class="d-flex justify-content-end border border-primary"></div>
 
 
 <div class="d-flex justify-content-start ms-5 p-4">
@@ -52,8 +50,52 @@
 </div>
 </div>
 
+<div class="d-flex justify-content-start text-center ms-5 p-4">
+  <div class="border border-primary p-3" style="width: 275px">
+    <h4>Preprocessing Options</h4>
+  </div>
+</div>
+
+<div class="d-flex justify-content-start ms-5 p-4">
+  <ul class="list-group">
+    <li class="list-group-item">
+      <input class="form-check-input me-1" type="checkbox" id="artifacts">
+      <label class="form-check-label" for="artifacts">Artifacts</label>
+    </li>
+    <li class="list-group-item">
+      <input class="form-check-input me-1" type="checkbox" id="regression">
+      <label class="form-check-label" for="regression">Regression</label>
+    </li>
+    <li class="list-group-item">
+      <input class="form-check-input me-1" type="checkbox" id="filtering">
+      <label class="form-check-label" for="filtering">Filtering</label>
+    </li>
+    <li class="list-group-item">
+      <input class="form-check-input me-1" type="checkbox" id="ica">
+      <label class="form-check-label" for="ica">ICA</label>
+    </li>
+  </ul>
+</div>
+
+<div class="d-flex justify-content-start text-center ms-5 p-4">
+  <div class="border border-primary p-3" style="width: 250px">
+    <h4>Image Map Options</h4>
+  </div>
+</div>
+
+<div class="d-flex justify-content-start ms-5 p-4">
+  <div class="form-check form-check-inline">
+    <input class="form-check-input" type="checkbox" name="ImageMap" id="epochs">
+    <label class="form-check-label" for="epochs">Epochs</label>
+  </div>
+  <div class="form-check form-check-inline">
+    <input class="form-check-input" type="checkbox" name="ImageMap" id="evoked">
+    <label class="form-check-label" for="evoked">Evoked</label>
+  </div>
+</div>
+
 <div class="d-flex justify-content-between p-4">
-  <a type="button" href="#" class="btn btn-danger btn-lg d-flex justify-content-start">Skip</a>
-  <a type="button" href="#" class="btn btn-success btn-lg d-flex justify-content-end">Done</a>
+  <a type="button" href="{% url 'presentation' %}" class="btn btn-danger btn-lg d-flex justify-content-start">Skip</a>
+  <a type="button" href="{% url 'presentation' %}" class="btn btn-success btn-lg d-flex justify-content-end">Done</a>
 </div>
 {%endblock%}

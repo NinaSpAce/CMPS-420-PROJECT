@@ -8,9 +8,9 @@ from . import views
 urlpatterns = [
     path("", views.home, name= "homepage"),
     path("presentation", views.presentation, name= "presentation"),
-    path("settings/brainwaves", views.settings1, name= "settings-brainwaves"),
+    path("settings/graphs", views.settings1, name= "settings-graphs"),
     path("settings/electrode-topography", views.settings2, name="settings-electrode-topography"),
-    path("settings/heat-map", views.settings3, name="settings-heat-map")
+    path("settings/image-map", views.settings3, name="settings-image-map")
 ]
 
 if settings.DEBUG:

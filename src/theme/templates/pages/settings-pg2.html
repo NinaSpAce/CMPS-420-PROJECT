@@ -5,15 +5,12 @@
 
 
 <div class="d-flex justify-content-start text-center ms-5 p-4">
-    <div class="border border-primary p-3" style="width: 175px">
-      <h5>View Options</h5>
+    <div class="border border-primary p-3" style="width: 200px">
+      <h4>View Options</h4>
     </div>
   </div>
 
-  <div class="d-flex justify-content-end border border-primary"></div>
-
-
-
+ 
 <div class="d-flex justify-content-start ms-5 p-4">
   <p class="fs-5">Max Tabs<p>
 
@@ -53,8 +50,67 @@
 </div>
 </div>
 
+<div class="d-flex justify-content-start text-center ms-5 p-4">
+  <div class="border border-primary p-3" style="width: 275px">
+    <h4>Preprocessing Options</h4>
+  </div>
+</div>
+
+<div class="d-flex justify-content-start ms-5 p-4">
+  <ul class="list-group">
+    <li class="list-group-item">
+      <input class="form-check-input me-1" type="checkbox" id="artifacts">
+      <label class="form-check-label" for="artifacts">Artifacts</label>
+    </li>
+    <li class="list-group-item">
+      <input class="form-check-input me-1" type="checkbox" id="regression">
+      <label class="form-check-label" for="regression">Regression</label>
+    </li>
+    <li class="list-group-item">
+      <input class="form-check-input me-1" type="checkbox" id="filtering">
+      <label class="form-check-label" for="filtering">Filtering</label>
+    </li>
+    <li class="list-group-item">
+      <input class="form-check-input me-1" type="checkbox" id="ica">
+      <label class="form-check-label" for="ica">ICA</label>
+    </li>
+  </ul>
+</div>
+
+
+<div class="d-flex justify-content-start text-center ms-5 p-4">
+  <div class="border border-primary p-3" style="width: 275px">
+    <h4>Electrode Topography Options</h4>
+  </div>
+</div>
+
+<div class="d-flex justify-content-start ms-5 p-4">
+  <ul class="list-group">
+    <li class="list-group-item">
+      <input class="form-check-input me-1" type="checkbox" id="heat-map">
+      <label class="form-check-label" for="heat-map">Heat Map</label>
+    </li>
+    <li class="list-group-item">
+      <input class="form-check-input me-1" type="checkbox" id="sensors">
+      <label class="form-check-label" for="sensors">Sensors</label>
+    </li>
+    <li class="list-group-item">
+      <input class="form-check-input me-1" type="checkbox" id="layout">
+      <label class="form-check-label" for="layout">Layout</label>
+    </li>
+    <li class="list-group-item">
+      <input class="form-check-input me-1" type="checkbox" id="spectrum">
+      <label class="form-check-label" for="spectrum">Spectrum</label>
+    </li>
+    <li class="list-group-item">
+      <input class="form-check-input me-1" type="checkbox" id="epochs">
+      <label class="form-check-label" for="epochs">Epochs</label>
+    </li>
+  </ul>
+</div>
+
 <div class="d-flex justify-content-between p-4">
-    <a type="button" href="{% url 'settings-heat-map' %}" class="btn btn-danger btn-lg d-flex justify-content-start">Skip</a>
-    <a type="button" href="{% url 'settings-heat-map' %}" class="btn btn-success btn-lg d-flex justify-content-end">Next</a>
+    <a type="button" href="{% url 'settings-image-map' %}" class="btn btn-danger btn-lg d-flex justify-content-start">Skip</a>
+    <a type="button" href="{% url 'settings-image-map' %}" class="btn btn-success btn-lg d-flex justify-content-end">Next</a>
   </div>
 {%endblock%}

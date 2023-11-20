@@ -2,7 +2,50 @@
 
 {% block content %}
 {% include 'navbar.html'%}
+<script language="javascript">
+  // Load the state when the page is loaded
+  document.addEventListener('DOMContentLoaded', load);
 
+  // Save the state when a checkbox or radio is changed
+  document.addEventListener('change', save);
+function save() {
+            const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+            const radios = document.querySelectorAll('input[type="radio"]');
+            
+            checkboxes.forEach(checkbox => {
+                localStorage.setItem(checkbox.id, checkbox.checked);
+            });
+
+            radios.forEach(radio => {
+                localStorage.setItem(radio.id, radio.checked);
+            });
+        }
+
+  function load() {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    const radios = document.querySelectorAll('input[type="radio"]');
+
+    checkboxes.forEach(checkbox => {
+      const value = localStorage.getItem(checkbox.id);
+      if (value !== null) {
+        checkbox.checked = value === 'true';
+      }
+    });
+
+    radios.forEach(radio => {
+      const value = localStorage.getItem(radio.id);
+      if (value !== null) {
+        radio.checked = value === 'true';
+      }
+    });
+  }
+  
+  function nextPage(){
+    url = '{% url "presentation" %}';
+    window.location.href = url;
+  }
+
+</script>
 
 <div class="d-flex justify-content-start text-center ms-5 p-4">
     <div class="border border-primary p-3" style="width: 200px">
@@ -16,19 +59,19 @@
 
     <div class="p-1 ms-3">
     <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="TabOptions" id="1" value="option1">
+      <input class="form-check-input" type="radio" name="Tabs" id="1-ET">
       <label class="form-check-label" for="1">1</label>
     </div>
     <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="TabOptions" id="2" value="option2">
+      <input class="form-check-input" type="radio" name="Tabs" id="2-ET">
       <label class="form-check-label" for="2">2</label>
     </div>
     <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="TabOptions" id="3" value="option3">
+      <input class="form-check-input" type="radio" name="Tabs" id="3-ET">
       <label class="form-check-label" for="3">3</label>
     </div>
     <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="TabOptions" id="4" value="option4">
+      <input class="form-check-input" type="radio" name="Tabs" id="4-ET">
       <label class="form-check-label" for="4">4</label>
     </div>
   </div>
@@ -39,44 +82,16 @@
    
     <div class="p-1 ms-3">
       <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="SplitOptions" id="Vertical" value="option1">
+        <input class="form-check-input" type="radio" name="Split" id="Vertical-ET">
         <label class="form-check-label" for="Vertical">Vertical</label>
       </div>
       <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="SplitOptions" id="Horizontal" value="option2">
+        <input class="form-check-input" type="radio" name="Split" id="Horizontal-ET">
         <label class="form-check-label" for="Horizontal">Horizontal</label>
       </div>
   </div>
 </div>
 </div>
-
-<div class="d-flex justify-content-start text-center ms-5 p-4">
-  <div class="border border-primary p-3" style="width: 275px">
-    <h4>Preprocessing Options</h4>
-  </div>
-</div>
-
-<div class="d-flex justify-content-start ms-5 p-4">
-  <ul class="list-group">
-    <li class="list-group-item">
-      <input class="form-check-input me-1" type="checkbox" id="artifacts">
-      <label class="form-check-label" for="artifacts">Artifacts</label>
-    </li>
-    <li class="list-group-item">
-      <input class="form-check-input me-1" type="checkbox" id="regression">
-      <label class="form-check-label" for="regression">Regression</label>
-    </li>
-    <li class="list-group-item">
-      <input class="form-check-input me-1" type="checkbox" id="filtering">
-      <label class="form-check-label" for="filtering">Filtering</label>
-    </li>
-    <li class="list-group-item">
-      <input class="form-check-input me-1" type="checkbox" id="ica">
-      <label class="form-check-label" for="ica">ICA</label>
-    </li>
-  </ul>
-</div>
-
 
 <div class="d-flex justify-content-start text-center ms-5 p-4">
   <div class="border border-primary p-3" style="width: 275px">
@@ -87,30 +102,33 @@
 <div class="d-flex justify-content-start ms-5 p-4">
   <ul class="list-group">
     <li class="list-group-item">
-      <input class="form-check-input me-1" type="checkbox" id="heat-map">
+      <input class="form-check-input me-1" type="checkbox" id="heat-map" name="ETOptions">
       <label class="form-check-label" for="heat-map">Heat Map</label>
     </li>
     <li class="list-group-item">
-      <input class="form-check-input me-1" type="checkbox" id="sensors">
+      <input class="form-check-input me-1" type="checkbox" id="sensors" name="ETOptions">
       <label class="form-check-label" for="sensors">Sensors</label>
     </li>
     <li class="list-group-item">
-      <input class="form-check-input me-1" type="checkbox" id="layout">
+      <input class="form-check-input me-1" type="checkbox" id="layout" name="ETOptions">
       <label class="form-check-label" for="layout">Layout</label>
     </li>
     <li class="list-group-item">
-      <input class="form-check-input me-1" type="checkbox" id="spectrum">
+      <input class="form-check-input me-1" type="checkbox" id="spectrum-ET" name="ETOptions">
       <label class="form-check-label" for="spectrum">Spectrum</label>
     </li>
     <li class="list-group-item">
-      <input class="form-check-input me-1" type="checkbox" id="epochs">
+      <input class="form-check-input me-1" type="checkbox" id="epochs-ET" name="ETOptions">
       <label class="form-check-label" for="epochs">Epochs</label>
     </li>
   </ul>
 </div>
 
-<div class="d-flex justify-content-between p-4">
-    <a type="button" href="{% url 'settings-image-map' %}" class="btn btn-danger btn-lg d-flex justify-content-start">Skip</a>
-    <a type="button" href="{% url 'settings-image-map' %}" class="btn btn-success btn-lg d-flex justify-content-end">Next</a>
+<div class="d-flex align-items-center justify-content-between p-4">
+  <a type="button" href="{% url 'presentation' %}" class="btn btn-danger btn-lg d-flex justify-content-start m-2">Skip</a>
+  <div class="d-flex justify-content-end">
+    <button type="button" id="save" class="btn btn-warning btn-lg d-flex justify-content-end m-2" onclick="checkOptions()">Save</button>
+    <button disabled type="button" id="next" class="btn btn-success btn-lg d-flex justify-content-end m-2" onclick="nextPage()">Next</a>
   </div>
+</div>
 {%endblock%}

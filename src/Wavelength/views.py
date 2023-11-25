@@ -2,19 +2,30 @@ from django.shortcuts import render, redirect, HttpResponse
 from .models import FileUpload
 import mne
 from mne.preprocessing import EOGRegression, ICA
-import numpy as np                
-import plotly.graph_objects as go 
 import plotly.io as pio
-from plotly.offline import plot
-from plotly.graph_objs import Layout, YAxis, Scatter, Annotation, Annotations, Data, Figure, Marker, Font
+import plotly.subplots
+import plotly.graph_objects as go
+
 mne.set_log_level('WARNING')
 
 
 def filter_handling(request):
-     raw.crop(0, 50).pick_types(meg="mag", stim=True).load_data()
-     raw_downsampled = raw.copy().resample(sfreq=200)
-     print(raw.info)
-     return HttpResponse("Filter Handled.")
+    raw.crop(0, 60).pick(picks=["mag", "stim"]).load_data()
+    meg_picks = mne.pick_types(raw.info, meg=True)
+    freqs = (60, 120, 180, 240)
+    raw_notch_fit= raw.copy().notch_filter(freqs=freqs, picks=meg_picks, method="spectrum_fit", filter_length="10s"
+    )
+
+    spectrum = raw_notch_fit.compute_psd(fmax=75)
+    psds, freq = spectrum.get_data(return_freqs=True)
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=freq, y=psds, mode='lines', name='PSD'))
+    
+    fig.update_layout(title_text="Filtered Data", font=dict(size=20, family="Arial"))
+
+    filter_html= pio.to_html(fig, full_html=True)
+    print(raw.info)
+    return HttpResponse("Filtering Handled.")
 
 def regression_handling(request):
     raw.pick(["eeg", "eog", "stim"])
@@ -28,24 +39,51 @@ def regression_handling(request):
     model_plain = EOGRegression(picks="eeg", picks_artifact="eog").fit(epochs)
     epochs_clean_plain = model_plain.apply(epochs)
     epochs_clean_plain.apply_baseline()
+
+    plot_kwargs = dict(picks="all", ylim=dict(eeg=(-10, 10), eog=(-5, 15)))
+    
+    fig = go.Figure()
+    mne_trace = epochs_clean_plain.average("all").plot(show=False,**plot_kwargs)
+    
+    axes = mne_trace.get_axes()
+    line_object = axes[0].get_lines()[0]
+    
+    x_data, y_data = line_object.get_data()
+    
+    fig.add_trace(go.Scattergl(x=x_data, y=y_data, mode='lines', name='epochs'))
+    
+    fig.update_layout(title_text="Regression Data", font=dict(size=20, family="Arial"))
+
+    regression_html= pio.to_html(fig, full_html=True)
     print(raw.info)
     return HttpResponse("Regression Handled.")
-    
+
 
 def ica_handling(request):
      raw.crop(tmax=60.0).pick_types(meg="mag", eeg=True, stim=True, eog=True)
      raw.load_data()
      filt_raw = raw.copy().filter(l_freq=1.0, h_freq=None)
+     global ica
      ica = ICA(n_components=15, max_iter="auto", random_state=97)
      ica.fit(filt_raw)
 
      ica.exclude = []
      eog_indices, eog_scores = ica.find_bads_eog(raw)
      ica.exclude = eog_indices    
+     mpl_fig = ica.plot_sources(raw, show=False, show_scrollbars=False)
+     fig = go.Figure()
+     
+     for trace in mpl_fig.get_axes()[0].get_lines():
+         x_data, y_data = trace.get_data()
+         fig.add_trace(go.Scatter(x=x_data, y=y_data, mode='lines'))
+     
+     fig.update_layout(title_text="ICA Data", font=dict(size=20, family="Arial"))
+     
+     ica_html= pio.to_html(fig, full_html=True)
      print(raw.info)
      return HttpResponse("ICA Handled.")
-    
-     
+
+       
 
 def channel_graph(request):
     new_raw = raw.copy()
@@ -115,7 +153,6 @@ def events(request):
 #     "face": 5,
 #     "buttonpress": 32,
 #    }
- 
 #    epochs = mne.Epochs(raw, events, tmin=-0.3, tmax=0.7, event_id=event_dict, preload=True) 
 #    epochs = ica.apply(epochs,exclude=ica.exclude)
 #    epochs.apply_baseline((None,0))

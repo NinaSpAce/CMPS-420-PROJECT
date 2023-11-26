@@ -5,13 +5,17 @@
 <div class="container d-flex flex-column p-3">
 <div class="container-lg ">
     <nav class= "nav nav-tabs nav-fill" role="tablist">
-            <button class="nav-link active border border-danger" id="Graph-1" type="button" role="tab" aria-selected="true" aria-controls="Channels-Graph" data-bs-toggle="tab" data-bs-target="#">Graph 1</button>
+            <button class="nav-link active border border-danger" id="Graph-1" type="button" role="tab" aria-selected="true" aria-controls="Filter-Graph" data-bs-toggle="tab" data-bs-target="#Filter-Graph">Graph 1</button>
           
-            <button class="nav-link border border-danger" id="Graph-2" type="button" role="tab" aria-selected="false" aria-controls="Epoch-Graph" data-bs-toggle="tab" data-bs-target="#">Graph 2</button>
+            <button class="nav-link border border-danger" id="Graph-2" type="button" role="tab" aria-selected="false" aria-controls="Regression-Graph" data-bs-toggle="tab" data-bs-target="#Regression-Graph">Graph 2</button>
+          
+            <button class="nav-link border border-danger" id="Graph-3" type="button" role="tab" aria-selected="false" aria-controls="ICA-Graph" data-bs-toggle="tab" data-bs-target="#ICA-Graph">Graph 3</button>
           </nav>
           <div class="tab-content border border-primary">
-            <div id="Channels-Graph"  class="tab-pane fade show active" role="tabpanel" tabindex="0" aria-labelledby="Graph-1"></div>   
-            <div id="Epoch-Graph" class="tab-pane fade" role="tabpanel" tabindex="0" aria-labelledby="Graph-2"></div>   
+            <div id="Filter-Graph"  class="tab-pane fade show active" role="tabpanel" tabindex="0" aria-labelledby="Graph-1"> {% if filter_html %}   {{ filter_html|safe }}   {% endif %}</div>   
+            <div id="Regression-Graph" class="tab-pane fade" role="tabpanel" tabindex="0" aria-labelledby="Graph-2"> {% if regression_html %}   {{ regression_html|safe }}   {% endif %}</div>   
+            <div id="ICA-Graph" class="tab-pane fade" role="tabpanel" tabindex="0" aria-labelledby="Graph-3"> {% if ica_html %}   {{ ica_html|safe }}   {% endif %}</div>   
+
           </div>
   </div>
 

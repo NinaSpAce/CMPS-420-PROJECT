@@ -4,6 +4,8 @@ import mne
 from mne.preprocessing import EOGRegression, ICA
 import plotly.io as pio
 import plotly.subplots
+import pandas as pd
+import numpy as np
 import plotly.graph_objects as go
 
 mne.set_log_level('WARNING')
@@ -23,6 +25,7 @@ def filter_handling(request):
     
     fig.update_layout(title_text="Filtered Data", font=dict(size=20, family="Arial"))
 
+    global filter_html
     filter_html= pio.to_html(fig, full_html=True)
     print(raw.info)
     return HttpResponse("Filtering Handled.")
@@ -40,20 +43,22 @@ def regression_handling(request):
     epochs_clean_plain = model_plain.apply(epochs)
     epochs_clean_plain.apply_baseline()
 
-    plot_kwargs = dict(picks="all", ylim=dict(eeg=(-10, 10), eog=(-5, 15)))
+    plot_kwargs = dict(picks="all", ylim=dict(eeg=(-10, 10), eog=(-5, 15)))  
+    
+    values = epochs_clean_plain.get_data().mean(axis=0)
+    
+    values = pd.DataFrame(np.transpose(values), columns=epochs_clean_plain.info['ch_names'])
+    values.head()
     
     fig = go.Figure()
-    mne_trace = epochs_clean_plain.average("all").plot(show=False,**plot_kwargs)
     
-    axes = mne_trace.get_axes()
-    line_object = axes[0].get_lines()[0]
     
-    x_data, y_data = line_object.get_data()
+    fig.update_layout(**plot_kwargs, title_text="Regression Data", font=dict(size=20, family="Arial"))
     
-    fig.add_trace(go.Scattergl(x=x_data, y=y_data, mode='lines', name='epochs'))
-    
-    fig.update_layout(title_text="Regression Data", font=dict(size=20, family="Arial"))
+    for ch in epochs_clean_plain.info['ch_names']:
+      fig.add_scatter(x=epochs_clean_plain.times, y=values[ch], name=ch)
 
+    global regression_html
     regression_html= pio.to_html(fig, full_html=True)
     print(raw.info)
     return HttpResponse("Regression Handled.")
@@ -63,7 +68,6 @@ def ica_handling(request):
      raw.crop(tmax=60.0).pick_types(meg="mag", eeg=True, stim=True, eog=True)
      raw.load_data()
      filt_raw = raw.copy().filter(l_freq=1.0, h_freq=None)
-     global ica
      ica = ICA(n_components=15, max_iter="auto", random_state=97)
      ica.fit(filt_raw)
 
@@ -79,6 +83,7 @@ def ica_handling(request):
      
      fig.update_layout(title_text="ICA Data", font=dict(size=20, family="Arial"))
      
+     global ica_html
      ica_html= pio.to_html(fig, full_html=True)
      print(raw.info)
      return HttpResponse("ICA Handled.")
@@ -178,8 +183,13 @@ def settings2(request):
 def settings3(request):
     return render(request, "pages/settings-pg3.html", {})
 
-def presentation (request):
-    return render(request, "pages/presentation.html", {})
+def presentation (request):    
+    graph_vars_dict = {
+        var: globals()[var] for var in ['filter_html', 'regression_html', 'ica_html']
+        if var in globals() and var != 'raw'  # Exclude 'raw'                                  
+    }
+
+    return render(request, "pages/presentation.html", graph_vars_dict)
 
 
 #First page

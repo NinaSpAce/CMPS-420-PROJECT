@@ -20,8 +20,13 @@ def filter_handling(request):
 
     spectrum = raw_notch_fit.compute_psd(fmax=75)
     psds, freq = spectrum.get_data(return_freqs=True)
+    
+    df_filter= pd.DataFrame(data=psds.T, columns=spectrum.info['ch_names'])
+    
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=freq, y=psds, mode='lines', name='PSD'))
+    
+    for ch in df_filter.columns:
+        fig.add_trace(go.Scatter(x=freq, y=df_filter[ch], mode='lines', name=ch))
     
     fig.update_layout(title_text="Filtered Data", font=dict(size=20, family="Arial"))
 
@@ -42,8 +47,6 @@ def regression_handling(request):
     model_plain = EOGRegression(picks="eeg", picks_artifact="eog").fit(epochs)
     epochs_clean_plain = model_plain.apply(epochs)
     epochs_clean_plain.apply_baseline()
-
-    plot_kwargs = dict(picks="all", ylim=dict(eeg=(-10, 10), eog=(-5, 15)))  
     
     values = epochs_clean_plain.get_data().mean(axis=0)
     
@@ -53,7 +56,7 @@ def regression_handling(request):
     fig = go.Figure()
     
     
-    fig.update_layout(**plot_kwargs, title_text="Regression Data", font=dict(size=20, family="Arial"))
+    fig.update_layout(title_text="Regression Data", font=dict(size=20, family="Arial"))
     
     for ch in epochs_clean_plain.info['ch_names']:
       fig.add_scatter(x=epochs_clean_plain.times, y=values[ch], name=ch)
@@ -72,20 +75,26 @@ def ica_handling(request):
      ica.fit(filt_raw)
 
      ica.exclude = []
-     eog_indices, eog_scores = ica.find_bads_eog(raw)
-     ica.exclude = eog_indices    
-     mpl_fig = ica.plot_sources(raw, show=False, show_scrollbars=False)
+     eog_indices, eog_scores = ica.find_bads_eog(filt_raw)
+     ica.exclude = eog_indices  
+     
+     ica_sources = ica.get_sources(inst=filt_raw)
+     
+     ica_sources_array = ica_sources.get_data()
+    
+     ica_df = pd.DataFrame(data=ica_sources_array.T[:, :15], columns=ica.info['ch_names'][:15])
+
      fig = go.Figure()
      
-     for trace in mpl_fig.get_axes()[0].get_lines():
-         x_data, y_data = trace.get_data()
-         fig.add_trace(go.Scatter(x=x_data, y=y_data, mode='lines'))
+     times = raw.times
+     
+     for ch in ica_df.columns:
+         fig.add_trace(go.Scatter(x=times, y=ica_df[ch], name=ch, mode='lines'))
      
      fig.update_layout(title_text="ICA Data", font=dict(size=20, family="Arial"))
      
      global ica_html
      ica_html= pio.to_html(fig, full_html=True)
-     print(raw.info)
      return HttpResponse("ICA Handled.")
 
        

@@ -14,6 +14,7 @@ urlpatterns = [
     path("settings/graphs/regression", views.regression_handling, name="regression"),
     path("settings/graphs/filtering", views.filter_handling, name="filtering"),
     path("settings/graphs/ica", views.ica_handling, name="ica"),
+    path("settings/graphs/channels", views.channel_graph, name="channels"),
 ]
 
 if settings.DEBUG:

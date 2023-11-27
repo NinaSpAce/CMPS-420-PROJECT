@@ -101,11 +101,20 @@ def ica_handling(request):
 
 def channel_graph(request):
     new_raw = raw.copy()
-    chs = []
-    chan_idxs = [raw.ch_names.index(ch) for ch in chs]
-    new_raw.plot(order=chan_idxs, start=12, duration=4)
+    channel_names = new_raw.ch_names
+    channels_to_plot = channel_names[:20] 
+    chan_idxs = [channel_names.index(ch) for ch in channels_to_plot]
+    fig = go.Figure()
+    
+    for ids in chan_idxs:
+        channel_data = new_raw.get_data()[ids, :]
+        times = new_raw.times
+        
+        fig.add_trace(go.Scatter(x=times, y=channel_data, mode= 'lines', name= f'{new_raw.ch_names[ids]}'))
+    
+    fig.update_layout(width=800, height= 400, title_text="Channel Data", font=dict(size=20, family="Arial"))
     print(new_raw.info)
-    fig = raw.plot(order=chan_idxs, start=12, duration=4)
+    global channels_html
     channels_html= pio.to_html(fig, full_html=True)
     return HttpResponse("Channel graph handled.")
       
@@ -194,7 +203,7 @@ def settings3(request):
 
 def presentation (request):    
     graph_vars_dict = {
-        var: globals()[var] for var in ['filter_html', 'regression_html', 'ica_html']
+        var: globals()[var] for var in ['filter_html', 'regression_html', 'ica_html', 'channels_html']
         if var in globals() and var != 'raw'  # Exclude 'raw'                                  
     }
 

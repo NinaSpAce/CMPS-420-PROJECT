@@ -19,7 +19,21 @@
     var save = document.querySelector('#save');
     var regression = document.querySelector('#regression-graphs');
     var filtering = document.querySelector('#filtering-graphs');
+    var channels = document.querySelector('#channels');
     var ica = document.querySelector('#ica-graphs');
+
+    if(channels.checked){
+      fetch('graphs/channels', {
+      method: 'GET',
+     })
+      .then(response => response.text())
+      .then(data => {
+        console.log('Server response:', data);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    }
 
     if(ica.checked){
       fetch('graphs/ica', {
@@ -279,114 +293,6 @@ document.addEventListener('change', saveState);
       </ul>
     </div>
   
-  <div class="d-flex justify-content-start text-center ms-5 p-4">
-    <div class="border border-primary p-3" style="width: 225px">
-      <h4>Channel Options</h4>
-    </div>
-  </div>
- 
-  <div class="d-flex justify-content-start ms-5 p-4">
-      
-        <ul class="list-group list-group-horizontal">
-          <li class="list-group-item">
-            <input class="form-check-input me-1" type="checkbox" id="select-all" onchange="selectAll()">
-            <label class="form-check-label" for="select-all">Select All</label>
-          </li>
-          </ul>
-  </div>
-
-  <div class="ms-5 p-4">
-        <ul class="list-group list-group-horizontal-sm">
-          <li class="list-group-item flex-fill">
-            <input class="form-check-input me-1" type="checkbox" id="MEG-0111" name="channels">
-            <label class="form-check-label" for="MEG-0111">MEG 0111</label>
-          </li>
-          <li class="list-group-item flex-fill">
-            <input class="form-check-input me-1" type="checkbox" id="MEG-0121" name="channels">
-            <label class="form-check-label" for="MEG-0121">MEG 0121</label>
-          </li>
-          <li class="list-group-item flex-fill">
-            <input class="form-check-input me-1" type="checkbox" id="MEG-0131" name="channels">
-            <label class="form-check-label" for="MEG-0131">MEG 0131</label>
-          </li>
-          <li class="list-group-item flex-fill">
-            <input class="form-check-input me-1" type="checkbox" id="MEG-0211" name="channels">
-            <label class="form-check-label" for="MEG-0211">MEG 0211</label>
-          </li>
-          <li class="list-group-item flex-fill">
-            <input class="form-check-input me-1" type="checkbox" id="MEG-0211" name="channels">
-            <label class="form-check-label" for="MEG-0211">MEG 0221</label>
-          </li>
-          </ul>
-        <ul class="list-group list-group-horizontal-sm">
-          <li class="list-group-item flex-fill">
-            <input class="form-check-input me-1" type="checkbox" id="MEG-0231" name="channels">
-            <label class="form-check-label" for="MEG-0231">MEG 0231</label>
-          </li>
-          <li class="list-group-item flex-fill">
-            <input class="form-check-input me-1" type="checkbox" id="MEG-0311" name="channels">
-            <label class="form-check-label" for="MEG-0311">MEG 0311</label>
-          </li>
-          <li class="list-group-item flex-fill">
-            <input class="form-check-input me-1" type="checkbox" id="MEG-0321" name="channels">
-            <label class="form-check-label" for="MEG-0321">MEG 0321</label>
-          </li>
-          <li class="list-group-item flex-fill">
-            <input class="form-check-input me-1" type="checkbox" id="MEG-0331" name="channels">
-            <label class="form-check-label" for="MEG-0331">MEG 0331</label>
-          </li>
-          <li class="list-group-item flex-fill">
-            <input class="form-check-input me-1" type="checkbox" id="MEG-1511" name="channels">
-            <label class="form-check-label" for="MEG-1511">MEG 1511</label>
-          </li>
-          </ul>
-
-        <ul class="list-group list-group-horizontal-sm">
-          <li class="list-group-item flex-fill">
-            <input class="form-check-input me-1" type="checkbox" id="MEG-1521" name="channels">
-            <label class="form-check-label" for="MEG-1521">MEG 1521</label>
-          </li>
-          <li class="list-group-item flex-fill">
-            <input class="form-check-input me-1" type="checkbox" id="MEG-1531" name="channels">
-            <label class="form-check-label" for="MEG-1531">MEG 1531</label>
-          </li>
-          <li class="list-group-item flex-fill">
-            <input class="form-check-input me-1" type="checkbox" id="EEG-001" name="channels">
-            <label class="form-check-label" for="EEG-001">EEG 001</label>
-          </li>
-          <li class="list-group-item flex-fill">
-            <input class="form-check-input me-1" type="checkbox" id="EEG-002" name="channels">
-            <label class="form-check-label" for="EEG-002">EEG 002</label>
-          </li>
-          <li class="list-group-item flex-fill">
-            <input class="form-check-input me-1" type="checkbox" id="EEG-003" name="channels">
-            <label class="form-check-label" for="EEG-003">EEG 003</label>
-          </li>
-          </ul>
-
-        <ul class="list-group list-group-horizontal-sm">
-          <li class="list-group-item flex-fill">
-            <input class="form-check-input me-1" type="checkbox" id="EEG-004" name="channels">
-            <label class="form-check-label" for="EEG-004">EEG 004</label>
-          </li>
-          <li class="list-group-item flex-fill">
-            <input class="form-check-input me-1" type="checkbox" id="EEG-005" name="channels">
-            <label class="form-check-label" for="EEG-005">EEG 005</label>
-          </li>
-          <li class="list-group-item flex-fill">
-            <input class="form-check-input me-1" type="checkbox" id="EEG-006" name="channels">
-            <label class="form-check-label" for="EEG-006">EEG 006</label>
-          </li>
-          <li class="list-group-item flex-fill">
-            <input class="form-check-input me-1" type="checkbox" id="EEG-007" name="channels">
-            <label class="form-check-label" for="EEG-007">EEG 007</label>
-          </li>
-          <li class="list-group-item flex-fill">
-            <input class="form-check-input me-1" type="checkbox" id="EEG-008" name="channels">
-            <label class="form-check-label" for="EEG-008">EEG 008</label>
-          </li>
-        </ul>
-    </div>
           
     <div class="d-flex justify-content-start text-center ms-5 p-4">
       <div class="border border-primary p-3" style="width: 200px">

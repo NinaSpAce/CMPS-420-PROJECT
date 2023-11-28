@@ -2,8 +2,9 @@
 
 
 {% block content %}
+
 <div class="container d-flex flex-column p-3">
-<div class="container-lg ">
+<div class="container-lg">
     <nav class= "nav nav-tabs nav-fill" role="tablist">
             <button class="nav-link active border border-danger" id="Graph-1" type="button" role="tab" aria-selected="true" aria-controls="Filter-Graph" data-bs-toggle="tab" data-bs-target="#Filter-Graph">Graph 1</button>
           
@@ -19,31 +20,20 @@
           </div>
   </div>
 
-  <div class="container d-flex flex-row">
-  <div class="container-sm p-3">
+  <div class="container-lg">
     <nav class= "nav nav-tabs nav-fill" role="tablist">
        
             <button class="nav-link active border border-danger" id="Graph-4" type="button" role="tab" aria-selected="true" aria-controls="Channel-Graph" data-bs-toggle="tab" data-bs-target="#Channel-Graph">Graph 1</button>
-    
-            <button class="nav-link border border-danger">Graph 2</button>
-
+            <button class="nav-link border border-danger" id="Graph-5" type="button" role="tab" aria-selected="false" aria-controls="Epoch-Graph" data-bs-toggle="tab" data-bs-target="#Epoch-Graph">Graph 2</button>
     </nav>
     <div class="tab-content border border-primary">
       <div id="Channel-Graph" class="tab-pane fade show active" role="tabpanel" tabindex="0" aria-labelledby="Graph-4"> {% if channels_html %}   {{ channels_html|safe }}   {% endif %}</div> 
+      <div id="Epoch-Graph" class="tab-pane fade show" role="tabpanel" tabindex="0" aria-labelledby="Graph-5"> {% if epochs_html %}   {{ epochs_html|safe }}   {% endif %}</div> 
     </div>
   </div>
 
-  <div class="container-sm p-3">
-    <nav class= "nav nav-tabs nav-fill">
-      
-            <button class="nav-link active border border-danger">Graph 1</button>
-          
-
-            <button class="nav-link border border-danger">Graph 2</button>
-    </nav>
-          <div class="border border-primary"></div>  
+  
   </div>
-</div>
-</div>
+
   
 {% endblock %}	

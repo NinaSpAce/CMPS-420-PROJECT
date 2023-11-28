@@ -21,6 +21,7 @@
     var filtering = document.querySelector('#filtering-graphs');
     var channels = document.querySelector('#channels');
     var ica = document.querySelector('#ica-graphs');
+    var epochs = document.querySelector('#epochs');
 
     if(channels.checked){
       fetch('graphs/channels', {
@@ -34,7 +35,19 @@
         console.error('Error:', error);
       });
     }
-
+    if(epochs.checked){
+      fetch('graphs/epochs', {
+      method: 'GET',
+     })
+      .then(response => response.text())
+      .then(data => {
+        console.log('Server response:', data);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    }
+    
     if(ica.checked){
       fetch('graphs/ica', {
       method: 'GET',
@@ -190,7 +203,7 @@ function combinedEvoked(checkboxes){
 });
   }
   function nextPage(){
-    url = '{% url "settings-electrode-topography" %}';
+    url = '{% url "presentation" %}';
     window.location.href = url;
   }
 
@@ -200,50 +213,6 @@ document.addEventListener('DOMContentLoaded', loadState);
 // Save the state when a checkbox or radio is changed
 document.addEventListener('change', saveState);
 </script>
-
-  <div class="d-flex justify-content-start text-center ms-5 p-4">
-    <div class="border border-primary p-3" style="width: 200px">
-      <h4>View Options</h4>
-    </div>
-  </div>
-
-<div id="MaxTabs" class="d-flex justify-content-start ms-5 p-4">
-<p class="fs-5">Max Tabs</p>
-    <div class="p-1 ms-3">
-    <div class="form-check form-check-inline">
-     <input class="form-check-input" type="radio" name="TabOptions" id="1-graphs" value="option1">
-      <label class="form-check-label" for="1">1</label>
-    </div>
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="TabOptions" id="2-graphs" value="option2">
-      <label class="form-check-label" for="2">2</label>
-    </div>
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="TabOptions" id="3-graphs" value="option3">
-      <label class="form-check-label" for="3">3</label>
-    </div>
-    <div class="form-check form-check-inline">
-      <input class="form-check-input" type="radio" name="TabOptions" id="4-graphs" value="option4">
-      <label class="form-check-label" for="4">4</label>
-    </div>
-  </div>
-  </div>
-
-
-<div class="d-flex justify-content-start ms-5 p-4">
-  <p class="fs-5">Split Style</p>
-   
-    <div class="p-1 ms-3">
-      <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="SplitOptions" id="Vertical-graphs">
-        <label class="form-check-label" for="Vertical">Vertical</label>
-      </div>
-      <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="SplitOptions" id="Horizontal-graphs">
-        <label class="form-check-label" for="Horizontal">Horizontal</label>
-      </div>
-  </div>
-</div>
 
 <div class="d-flex justify-content-start text-center ms-5 p-4">
   <div class="border border-primary p-3" style="width: 275px">
@@ -279,99 +248,14 @@ document.addEventListener('change', saveState);
           <label class="form-check-label" for="channels">Channels</label>
         </li>
         <li class="list-group-item">
-          <input class="form-check-input me-1" type="checkbox" name="graph-options" id="events-graphs">
-          <label class="form-check-label" for="events">Events</label>
-        </li>
-        <li class="list-group-item">
-          <input class="form-check-input me-1" type="checkbox" id="evoked-graphs" name="graph-options">
-          <label class="form-check-label" for="evoked">Evoked</label>
-        </li>
-        <li class="list-group-item">
-          <input class="form-check-input me-1" type="checkbox" id="time-frequency-graphs" name="graph-options">
-          <label class="form-check-label" for="time-frequency">Time-Frequency</label>
+          <input class="form-check-input me-1" type="checkbox" name="graph-options" id="epochs">
+          <label class="form-check-label" for="epochs">Epochs</label>
         </li>
       </ul>
     </div>
   
           
-    <div class="d-flex justify-content-start text-center ms-5 p-4">
-      <div class="border border-primary p-3" style="width: 200px">
-        <h4>Event Options</h4>
-      </div>
-    </div>
-   
-    <div class="d-flex justify-content-start ms-5 p-4">
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="EventOptions" id="generate-events">
-          <label class="form-check-label" for="generate-events">Generate Events</label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="EventOptions" id="events-only">
-          <label class="form-check-label" for="events-only">Events Only</label>
-        </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" name="EventOptions" id="events-raw">
-          <label class="form-check-label" for="events-raw">Events/Raw Data</label>
-        </div>
-      </div>
-    </div>
-
-    <div class="d-flex justify-content-start text-center ms-5 p-4">
-      <div class="border border-primary p-3" style="width: 220px">
-        <h4>Evoked Options</h4>
-      </div>
-    </div>
-
-    <div class="d-flex justify-content-start ms-5 p-4">
-      <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="EvokedOptions" id="Single" onchange="evokedChecker()">
-        <label class="form-check-label" for="Single">Single Evoked</label>
-      </div>
-      <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="EvokedOptions" id="Combined" onchange="evokedChecker()">
-        <label class="form-check-label" for="Combined">Combined Evoked</label>
-      </div>
-    </div>
-  </div>
-
-  <div class="d-flex justify-content-start ms-5 p-4">
-    <ul class="list-group">
-      <li class="list-group-item">
-      <input class="form-check-input me-1" type="checkbox" name="EventPicks" id="aud-left">
-      <label class="form-check-label" for="aud-left">auditory/left</label>
-      </li>
-    <li class="list-group-item">
-      <input class="form-check-input me-1" type="checkbox" name="EventPicks" id="aud-right">
-      <label class="form-check-label" for="aud-right">auditory/right</label>
-    </li>
-    <li class="list-group-item">
-      <input class="form-check-input me-1" type="checkbox" name="EventPicks" id="vis-left">
-      <label class="form-check-label" for="vis-left">visual/left</label>
-    </li>
-    <li class="list-group-item">
-      <input class="form-check-input me-1" type="checkbox" name="EventPicks" id="vis-right">
-      <label class="form-check-label" for="vis-right">visual/right</label>
-    </li>
-</ul>
-</div>
-
-<div class="d-flex justify-content-start text-center ms-5 p-4">
-  <div class="border border-primary p-3" style="width: 300px">
-    <h4>Time-Frequency Options</h4>
-  </div>
-</div>
-
-<div class="d-flex justify-content-start ms-5 p-4">
-  <div class="form-check form-check-inline">
-    <input class="form-check-input" type="checkbox" name="TFOptions" id="Spectrum-graphs">
-    <label class="form-check-label" for="Spectrum">Spectrum</label>
-  </div>
-  <div class="form-check form-check-inline">
-    <input class="form-check-input" type="checkbox" name="TFOptions" id="Epoch-Spectrum">
-    <label class="form-check-label" for="Epoch-Spectrum">Epochs Spectrum</label>
-  </div>
-</div>
-</div>
+    
 
   <div class="d-flex justify-content-end p-4">
     <button type="button" id="save" class="btn btn-warning btn-lg d-flex justify-content-end m-2" onclick="preprocessingOptions()">Save</button>

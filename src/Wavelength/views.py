@@ -3,7 +3,7 @@ from .models import FileUpload
 import mne
 from mne.preprocessing import EOGRegression, ICA
 import plotly.io as pio
-import plotly.subplots
+
 import pandas as pd
 import numpy as np
 import plotly.graph_objects as go
@@ -93,6 +93,7 @@ def ica_handling(request):
      
      fig.update_layout(title_text="ICA Data", font=dict(size=20, family="Arial"))
      
+    
      global ica_html
      ica_html= pio.to_html(fig, full_html=True)
      return HttpResponse("ICA Handled.")
@@ -118,92 +119,65 @@ def channel_graph(request):
     channels_html= pio.to_html(fig, full_html=True)
     return HttpResponse("Channel graph handled.")
       
-def events(request):
-    raw.crop(tmax=60).load_data()
-    return HttpResponse("Events graph handled.")
-   
-# def events(raw):
-#    events = mne.find_events(raw, stim_channel="STI 014")
-#    event_ids= ['aud_1', 'aud_r', 'vis_1', 'smiley', 'button']
-#    fig = mne.viz.plot_events(events, raw.info['sfreq'], raw.first_samp, show=False)
-#    figure = go.Figure(layout=dict(showlegend=True), data=[dict(name=e) for e in event_ids])
-#    events_html= pio.to_html(fig, full_html=True)
-#    return events_html
-
-# def channel_picks(raw):
-#    picks = mne.pick_types(raw.info, meg='grad', exclude=[])
-#    start, stop = raw.time_as_index([0,10])
-   
-#    n_channels = 20
-#    data, times = raw[picks[:n_channels], start:stop]
-#    ch_names = [raw.info['ch_names'][p] for p in picks[:n_channels]]
-#    step = 1. / n_channels
-#    kwargs = dict(domain=[1 - step, 1], showticklabels=False, zeroline=False, showgrid=False)
-
-   
-#    layout = Layout(yaxis=go.layout.YAxis(kwargs), showlegend=False)
-#    traces = [Scatter(x=times, y=data.T[:, 0])]
-
-
-#    for ii in range(1, n_channels):
-#         kwargs.update(domain=[1 - (ii + 1) * step, 1 - ii * step])
-#         layout.update({'yaxis%d' % (ii + 1): go.layout.YAxis(kwargs), 'showlegend': False})
-#         traces.append(Scatter(x=times, y=data.T[:, ii], yaxis='y%d' % (ii + 1)))
-
-  
-#    annotations = Annotations([go.layout.Annotation(x=-0.06, y=0, xref='paper', yref='y%d' % (ii + 1),
-#                                       text=ch_name, font=go.layout.annotation.Font(size=9), showarrow=False)
-#                           for ii, ch_name in enumerate(ch_names)])
-#    layout.update(annotations=annotations)
-#    layout.update(autosize=False, width=1000, height=600)
-#    fig = Figure(data=Data(traces), layout=layout)
-#    channels_html= pio.to_html(fig, full_html=True)
-#    return channels_html
-
       
-# def epoch_handler(raw):
-#    #Preprosses with ICA
-#    ica = mne.preprocessing.ICA(n_components=20,random_state=0)    
-#    ica.fit(raw)
-#    bad_ica, scores = ica.find_bads_eog(raw, 'MEG 0122', threshold =2)   
+def epoch_handler(request):
+    new_raw = raw.copy()
+    events = mne.find_events(new_raw, stim_channel="STI 014")
+    event_dict = {
+    "auditory/left": 1,
+    "auditory/right": 2,
+    "visual/left": 3,
+    "visual/right": 4,
+    "smiley": 5,
+    "buttonpress": 32,
+}
+    reject_criteria = dict(
+    mag=4000e-15,  # 4000 fT
+    grad=4000e-13,  # 4000 fT/cm
+    eeg=150e-6,  # 150 µV
+    eog=250e-6, # 250 µV
+)  
+    epochs = mne.Epochs(
+    new_raw,
+    events,
+    event_id=event_dict,
+    tmin=-0.2,
+    tmax=0.5,
+    reject=reject_criteria,
+    preload=True,
+)
    
-#    events = mne.find_events(raw, stim_channel="STI 014")
-#    event_dict = {
-#     "auditory/left": 1,
-#     "auditory/right": 2,
-#     "visual/left": 3,
-#     "visual/right": 4,
-#     "face": 5,
-#     "buttonpress": 32,
-#    }
-#    epochs = mne.Epochs(raw, events, tmin=-0.3, tmax=0.7, event_id=event_dict, preload=True) 
-#    epochs = ica.apply(epochs,exclude=ica.exclude)
-#    epochs.apply_baseline((None,0))
+    selected_conds = ["auditory/left", "auditory/right", "visual/left", "visual/right"]
+    epochs.equalize_event_counts(selected_conds)  # this operates in-place
+    aud_epochs = epochs["auditory"]
+    vis_epochs = epochs["visual"]
+    del new_raw, epochs  # free up memory
    
-#    values = epochs.get_data().mean(axis=0)
-#    values = pd.DataFrame(np.transpose(values), columns=epochs.info['ch_names'])
-#    values.head()
-   
-#    fig = go.Figure(layout=dict(xaxis=dict(title='time'),yaxis=dict(title='data')))
-#    for ch in epochs.info['ch_names']:
-#       fig.add_scatter(x=epochs.times, y=values[ch], name=ch)
+    values = aud_epochs.get_data().mean(axis=0)
 
-#    epochs_html= pio.to_html(fig, full_html=True)
-#    return epochs_html
+    print("Z values shape:", values.T.shape)
+    print("X values shape:", aud_epochs.times.shape)
+    print("Y values shape:", len(aud_epochs.info['ch_names']))
+    fig = go.Figure()
+    fig.add_trace(go.Heatmap(z=values.T, x=aud_epochs.times, y=aud_epochs.info['ch_names'], colorscale='Viridis'))
+    
+    fig.update_layout( 
+    height= 600,
+    title='Epochs Heatmap',
+    font=dict(size=20, family='Arial')
+)
+    print(fig)
+    global epochs_html
+    epochs_html= pio.to_html(fig, full_html=True)
+    return HttpResponse("Epochs graph handled.")
    
 
 def settings1(request):
     return render(request, "pages/settings-pg1.html", {})
 
-def settings2(request):
-    return render(request, "pages/settings-pg2.html", {})
-   
-def settings3(request):
-    return render(request, "pages/settings-pg3.html", {})
-
 def presentation (request):    
     graph_vars_dict = {
-        var: globals()[var] for var in ['filter_html', 'regression_html', 'ica_html', 'channels_html']
+        var: globals()[var] for var in ['filter_html', 'regression_html', 'ica_html', 'channels_html', 'epochs_html']
         if var in globals() and var != 'raw'  # Exclude 'raw'                                  
     }
 
